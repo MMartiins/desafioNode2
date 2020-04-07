@@ -80,18 +80,14 @@ app.delete("/repositories/:id", (request, response) => {
 });
 
 //rota de contagem dos likes
-app.post("/repositories/:id/like", (request, response) => {
-  const { like } = request.body;
+app.post("/repositories/:id/like", validateProjectId ,(request, response) => {
+  const { id } = request.params;
 
-  const repositorie = { id: uuid(), like };
+  const  repositorio = repositories.find( repo => repo.id === id);
 
-  if (repositorie <= 0) {
-    like += 1
-  }
+  repositorio.like =+ 1;
 
-  repositories.push(repositorie);
-
-  return response.json(repositorie);
+  return response.json(repositorio);
 });
 
 module.exports = app;
