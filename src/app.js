@@ -27,7 +27,7 @@ app.get("/repositories", (request, response) => {
   const { title } = request.query;
 
   const results = title
-  ? repositories.filter(repositorie => repositorie.title.includes(title))
+  ? repositories.filter(repository => repository.title.includes(title))
   : repositories;
 
   return response.json(results);
@@ -36,45 +36,50 @@ app.get("/repositories", (request, response) => {
 app.post("/repositories", (request, response) => {
   const { title, url, techs } = request.body;
 
-  const repositorie = { id: uuid(), title, url, techs };
+  const repository = { 
+    id: uuid(), 
+    title, 
+    url, 
+    techs, 
+  };
 
-  repositories.push(repositorie);
+  repositories.push(repository);
 
-  return response.json(repositorie);
+  return response.json(repository);
 });
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
   const { title, url, techs } = request.body;
 
-  const repositorieIndex = repositories.findIndex(repositorie => repositorie.id === id);
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id);
 
-  if (repositorieIndex < 0) {
+  if (repositoryIndex < 0) {
     return response.status(400).json({ error: 'Repositorie not found.' })
   }
 
-  const repositorie = {
+  const repository = {
     id,
     title,
     url,
     techs,
   };
 
-  repositories[repositorieIndex] = repositorie;
+  repositories[repositoryIndex] = repository;
 
-  return response.json(repositorie);
+  return response.json(repository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
   const { id } = request.params;
 
-  const repositorieIndex = repositories.findIndex(repositorie => repositorie.id === id);
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id);
 
-  if (repositorieIndex < 0) {
+  if (repositoryIndex < 0) {
     return response.status(400).json({ erro: 'Repositorie not found.' })
   }
 
-  repositories.splice(repositorieIndex, 1);
+  repositories.splice(repositoryIndex, 1);
 
   return response.status(204).send();
 });
