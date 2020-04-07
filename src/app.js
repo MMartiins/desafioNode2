@@ -9,6 +9,8 @@ app.use(cors());
 
 const repositories = [];
 
+
+//Aplicando a validação de ID unico
 function validateProjectId(request, response, next) {
   const { id } = request.params;
 
@@ -19,10 +21,10 @@ function validateProjectId(request, response, next) {
   return next();
 }
 
-app.use('/repositories/:id', validateProjectId);
+
 
 app.get("/repositories", (request, response) => {
-  const { title } = requesr.query;
+  const { title } = request.query;
 
   const results = title
   ? repositories.filter(repositorie => repositorie.title.includes(title))
@@ -48,7 +50,7 @@ app.put("/repositories/:id", (request, response) => {
   const repositorieIndex = repositories.findIndex(repositorie => repositorie.id === id);
 
   if (repositorieIndex < 0) {
-    return response.status(400).json({ erro: 'Repositorie not found.' })
+    return response.status(400).json({ error: 'Repositorie not found.' })
   }
 
   const repositorie = {
@@ -77,8 +79,19 @@ app.delete("/repositories/:id", (request, response) => {
   return response.status(204).send();
 });
 
+//rota de contagem dos likes
 app.post("/repositories/:id/like", (request, response) => {
-  
+  const { like } = request.body;
+
+  const repositorie = { id: uuid(), like };
+
+  if (repositorie <= 0) {
+    like += 1
+  }
+
+  repositories.push(repositorie);
+
+  return response.json(repositorie);
 });
 
 module.exports = app;
