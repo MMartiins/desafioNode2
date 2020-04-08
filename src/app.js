@@ -41,6 +41,7 @@ app.post("/repositories", (request, response) => {
     title, 
     url, 
     techs, 
+    likes: 0,
   };
 
   repositories.push(repository);
@@ -63,6 +64,7 @@ app.put("/repositories/:id", (request, response) => {
     title,
     url,
     techs,
+    likes: 0
   };
 
   repositories[repositoryIndex] = repository;
@@ -88,11 +90,15 @@ app.delete("/repositories/:id", (request, response) => {
 app.post("/repositories/:id/like", validateProjectId ,(request, response) => {
   const { id } = request.params;
 
-  const  repositorio = repositories.find( repo => repo.id === id);
+  const  repository = repositories.find( repository => repository.id === id);
 
-  repositorio.like =+ 1;
+  if (!repository) {
+    return response.status(400).send();
+  }
 
-  return response.json(repositorio);
+  repository.likes += 1;
+
+  return response.json(repository);
 });
 
 module.exports = app;
