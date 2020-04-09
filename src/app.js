@@ -41,7 +41,7 @@ app.post("/repositories", (request, response) => {
     title, 
     url, 
     techs, 
-    likes: repositories[repositoryIndes].likes,
+    likes: repositories[repositoryIndex].likes,
   };
 
   repositories.push(repository);
